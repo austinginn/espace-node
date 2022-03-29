@@ -1,5 +1,5 @@
 //requires fetch
-const fetch = require("node-fetch");
+import fetch from "node-fetch"
 
 //EVENT OBJECT
 
@@ -276,13 +276,13 @@ var Espace = function () {
         //////////////////
         //PUBLIC METHODS//
         //////////////////
-        this.getEvent = async function (eventId, scheduleId) {
+        this.getEvent = async (eventId, scheduleId) =>{
             //eventId required, scheduleId optional
             //validate required args
-            if (typeof eventId === 'undefined') {
-                let err = new Error('eventId undefined');
-                throw err
-            }
+            // if (typeof eventId === 'undefined') {
+            //     let err = new Error('eventId undefined');
+            //     throw err
+            // }
 
             //authenticate
             await getAuth();
@@ -393,4 +393,4 @@ var Espace = function () {
     return constructor;
 }();
 
-module.exports = Espace;
+export default Espace;
