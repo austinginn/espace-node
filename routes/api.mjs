@@ -67,7 +67,7 @@ router.post('/webhook', async (req, res) => {
 
 //touch all webhooks
 async function webhooks(){
-    for(let i = 0; i <= webhookURLS.length; i++){
+    for(let i = 0; i < webhookURLS.length; i++){
         try{
             await fetch(webhookURLS[i], {
                 method: 'POST',
