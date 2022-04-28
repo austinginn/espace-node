@@ -46,6 +46,14 @@ router.get('/webhook', async (req, res) => {
     publicEvents = await getEvents(GET_EVENTS_QUERY);
 });
 
+//POST webhook update
+//unsecure
+router.POST('/webhook', async (req, res) => {
+    console.log("refresh triggered by api/webhook POST");
+    res.sendStatus(200);
+    publicEvents = await getEvents(GET_EVENTS_QUERY);
+});
+
 
 //FUNCTIONS
 //get events
