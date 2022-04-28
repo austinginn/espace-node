@@ -13,6 +13,7 @@ const GET_EVENTS_QUERY = "topX=2000&publicOnly=true";
 const PUBLIC_EVENTS_REFRESH = 43200000; //12 hrs
 
 let publicEvents = [];
+let webhookURLS = ["https://events.afumc.org/api/update"];
 
 //start public event interval
 
@@ -48,6 +49,7 @@ router.get('/webhook', async (req, res) => {
     console.log("refresh triggered by api/webhook");
     res.sendStatus(200);
     publicEvents = await getEvents(GET_EVENTS_QUERY);
+    webhooks();
 });
 
 //POST webhook update
@@ -56,10 +58,28 @@ router.post('/webhook', async (req, res) => {
     console.log("refresh triggered by api/webhook POST");
     res.sendStatus(200);
     publicEvents = await getEvents(GET_EVENTS_QUERY);
+    webhooks();
 });
 
 
 //FUNCTIONS
+
+//touch all webhooks
+async function webhooks(){
+    for(let i = 0; i <= webhookURLS.length; i++){
+        try{
+            await fetch(webhookURLS[i], {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                  },
+                body: JSON.stringify({ auth: process.env.WEBHOOK_SECRET})
+            })
+        } catch(err){
+            console.log(err);
+        }
+    }
+}
 //get events
 async function getEvents(query) {
     try {
