@@ -37,11 +37,11 @@ router.get('/events', async (req, res) => {
 
 //POST manual event update
 //secured
-router.post('/update', (req, res) => {
-    publicEvents = getEvents("nextDays=60&publicOnly=true");
-    console.log("refresh triggered by api/update");
-    res.sendStatus(200);
-})
+// router.post('/update', (req, res) => {
+//     console.log("refresh triggered by api/update");
+//     res.sendStatus(200);
+//     publicEvents = await getEvents("nextDays=60&publicOnly=true");
+// })
 
 //GET webhook update
 //unsecure
@@ -68,13 +68,14 @@ router.post('/webhook', async (req, res) => {
 async function webhooks(){
     for(let i = 0; i <= webhookURLS.length; i++){
         try{
-            await fetch(webhookURLS[i], {
+            let response = await fetch(webhookURLS[i], {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                   },
                 body: JSON.stringify({ auth: process.env.WEBHOOK_SECRET})
-            })
+            });
+            console.log(response.json());
         } catch(err){
             console.log(err);
         }
