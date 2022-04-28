@@ -1,4 +1,3 @@
-
 import Espace from "../espace-node.mjs";
 import dotenv from 'dotenv';
 import express from 'express';
@@ -10,22 +9,27 @@ const __dirname = dirname(__filename);
 const router = express.Router();
 const es = new Espace(process.env.USERNAME, process.env.SECRET);
 
-const GET_EVENTS_QUERY = "nextDays=60&publicOnly=true";
+const GET_EVENTS_QUERY = "topX=2000&publicOnly=true";
 const PUBLIC_EVENTS_REFRESH = 43200000; //12 hrs
 
 let publicEvents = [];
 
 //start public event interval
-publicEvents = await getEvents(GET_EVENTS_QUERY);
-setInterval(async () => {
-    publicEvents =  await getEvents(GET_EVENTS_QUERY);
-}, PUBLIC_EVENTS_REFRESH);
 
+main();
+
+async function main(){
+    publicEvents = await getEvents(GET_EVENTS_QUERY);
+    // console.log(publicEvents);
+    setInterval(async () => {
+        publicEvents =  await getEvents(GET_EVENTS_QUERY);
+    }, PUBLIC_EVENTS_REFRESH);
+}
 
 
 //Routes//
 //GET public events
-router.get('/events', (req, res) => {
+router.get('/events', async (req, res) => {
     // console.log(publicEvents);
     res.json({ events: publicEvents });
 });
@@ -61,14 +65,15 @@ async function getEvents(query) {
     try {
         let events = await es.getEventList(query);
         // console.log(events.Data[0]);
-        return processData(events.Data);
+        let newEvents = processData(events.Data);
+        return newEvents;
     } catch (err) { console.log(err); }
 }
 
 //create new event array with only data we need
 function processData(data) {
     let processedEvents = [];
-    // console.log(data);
+    // console.log(data.length);
     for (let i = 0; i < data.length; i++) {
         //ignore drafts
         if (data[i].EventStatus == "Approved") {

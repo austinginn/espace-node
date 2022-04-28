@@ -37,10 +37,7 @@ var Espace = function () {
                     }
                 });
                 const status = checkStatus(await response.status);
-                const data = await response.json();
-                // console.log(status);
-                // console.log(data);
-                return data;
+                return await response.json();;
             } catch (error) {
                 console.log(error);
             }
@@ -87,15 +84,19 @@ var Espace = function () {
         //     })
         // }
 
-        const getEvents = function (query) {
-            return new Promise(resolve => {
-                let urlQ = config.api + '/api/v1/event/occurrences?'; //how to handle potential args??
-                if(query){
-                    urlQ += query;
-                    console.log(urlQ);
-                }
-                resolve(get(urlQ));
-            });
+        const getEvents = async function (query) {
+            let urlQ = config.api + '/api/v1/event/occurrences?'; //how to handle potential args??
+            if (query) {
+                urlQ += query;
+                console.log(urlQ);
+            }
+            try{
+                ;
+                return await get(urlQ);
+            } catch(err) {
+                console.log(err);
+            }
+
         }
 
         // const getEventOccureneces = function (nextDays, eventName, startDate, endDate, categoryIds, locationIds, categoryNames, locCodes, topX, publicOnly) {
@@ -270,10 +271,16 @@ var Espace = function () {
         //     // await getAuth();
         //     return getEvent(eventId, scheduleId);
         // }
-        
+
         this.getEventList = async function (query) {
             //maybe consider passing optional vars as an object?
-            return await getEvents(query);
+            try{
+                return await getEvents(query);
+            } catch(err){
+                console.log(err);
+            }
+
+            
         }
 
         // this.getEventOccureneces = async () => {
