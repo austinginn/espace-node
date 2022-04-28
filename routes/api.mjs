@@ -33,6 +33,7 @@ async function main(){
 //GET public events
 router.get('/events', async (req, res) => {
     // console.log(publicEvents);
+    res.set('Access-Control-Allow-Origin', '*');
     res.json({ events: publicEvents });
 });
 
