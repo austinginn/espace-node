@@ -69,14 +69,13 @@ router.post('/webhook', async (req, res) => {
 async function webhooks(){
     for(let i = 0; i <= webhookURLS.length; i++){
         try{
-            let response = await fetch(webhookURLS[i], {
+            await fetch(webhookURLS[i], {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                   },
                 body: JSON.stringify({ auth: process.env.WEBHOOK_SECRET})
             });
-            console.log(response.json());
         } catch(err){
             console.log(err);
         }
