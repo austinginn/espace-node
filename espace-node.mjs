@@ -87,15 +87,13 @@ var Espace = function () {
         //     })
         // }
 
-        const getEventList = function (query) {
+        const getEvents = function (query) {
             return new Promise(resolve => {
-                let urlQ = config.api + '/api/v1/event/list?'; //how to handle potential args??
+                let urlQ = config.api + '/api/v1/event/occurrences?'; //how to handle potential args??
                 if(query){
                     urlQ += query;
                     console.log(urlQ);
                 }
-                
-
                 resolve(get(urlQ));
             });
         }
@@ -275,7 +273,7 @@ var Espace = function () {
         
         this.getEventList = async function (query) {
             //maybe consider passing optional vars as an object?
-            return await getEventList(query);
+            return await getEvents(query);
         }
 
         // this.getEventOccureneces = async () => {
